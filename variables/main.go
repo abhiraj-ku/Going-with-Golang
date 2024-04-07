@@ -12,5 +12,9 @@ func main() {
 	fmt.Println(name)
 	fmt.Printf("The type of var name is : %T and length is %v \n", name, len(name))
 
+	// numbers
+	var numone int8 = 34
+	fmt.Print(numone)
+
 	// fmt.Println("hello from vars")
 }
