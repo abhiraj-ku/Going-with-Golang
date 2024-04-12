@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func main() {
 	// if-else
 	// in go it is neccessary to have {brakcets even for single line too}
@@ -47,25 +45,27 @@ func main() {
 
 	// (shik shak shock) golang does not have break keyword after a case it's by default built in
 
-	day := 9
+	// day := 9
 
-	switch day {
-	case 1:
-		fmt.Println("Monday")
-	case 2:
-		fmt.Println("Tuesday")
-	case 3:
-		fmt.Println("Wednesday")
-	case 4:
-		fmt.Println("Thursday")
-	case 5:
-		fmt.Println("Friday")
-	case 6:
-		fmt.Println("Saturday")
-	case 7:
-		fmt.Println("Sunday")
-	default:
-		fmt.Println("Invalid day")
-	}
+	// switch day {
+	// case 1:
+	// 	fmt.Println("Monday")
+	// case 2:
+	// 	fmt.Println("Tuesday")
+	// case 3:
+	// 	fmt.Println("Wednesday")
+	// case 4:
+	// 	fmt.Println("Thursday")
+	// case 5:
+	// 	fmt.Println("Friday")
+	// case 6:
+	// 	fmt.Println("Saturday")
+	// case 7:
+	// 	fmt.Println("Sunday")
+	// default:
+	// fmt.Println("Invalid day")
+	// }
+
+	// in Golang if it's not the same size and type it's not compatible
 
 }
