@@ -1,10 +1,8 @@
 package main
-  
-import (
-	"net/http"
-)
+
+// "net/http"
 
 func main() {
-	fileServer := http.FileServer(http.Dir("./static"))
-	http.handle(fileServer)
+	// fileServer := http.FileServer(http.Dir("./static"))
+	// http.handle(fileServer)
 }
