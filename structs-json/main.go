@@ -41,11 +41,45 @@ func main() {
 	// the above way has a problem cause now we have to give values for each of the field in the struct
 
 	// to avoid the above scenario we need to pass the values as in the original struct
-	var b = Employee{
-		Name:   "matt",
-		Number: 1,
-		Hired:  time.Now(),
-	}
-	fmt.Printf("%T %+[1]v", b)
+	// var b = Employee{
+	// 	Name:   "matt",
+	// 	Number: 1,
+	// 	Hired:  time.Now(),
+	// }
+	// fmt.Printf("%T %+[1]v", b)
 
+	// Another way is to make a annonymous struct OR a Struct literal;
+	var a = struct {
+		title  string
+		artist string
+		year   int
+		copies int
+	}{
+		"The white album",
+		"the beatles",
+		23,
+		2323,
+	}
+	fmt.Println(a)
+
+	var palbum = &a
+	fmt.Println(palbum)
+
+	// Struct compatibility
+	/* structs are copatible if and only if
+	1. the fields have same type and name
+	2. in the same order
+	3.and the same tags(*)
+
+	Note: a strut may be copied or passed as a param , the zero value of struct is "zero " for all its fields
+
+	so copatibilty is the issue here for the structs data types as long as they have the same value its okay
+	*/
+
+	// structs are passed as a copy to the function  params unless a pointer is used
+
+	// EMpty structs: it us useful as it has no memory
+
+	// var isPresent map[int]struct{}
+	// done := make(chan struct{})
 }
