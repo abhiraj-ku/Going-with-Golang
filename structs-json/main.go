@@ -82,4 +82,7 @@ func main() {
 
 	// var isPresent map[int]struct{}
 	// done := make(chan struct{})
+
+	// struct are passed by value;
+	// struct with no field is useful because thi does not takes up space
 }
