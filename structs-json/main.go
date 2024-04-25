@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -11,9 +12,20 @@ type Employee struct {
 	Boss   *Employee
 	Hired  time.Time
 }
+type Animal struct {
+	Name string `json:"name"`
+	Age  int    `json:"age"`
+}
 
 func main() {
 	fmt.Println("Hello, world!")
+
+	fmt.Println("Hello Structs!")
+	a := Animal{"cat", 19}
+	b, _ := json.Marshal(a)
+
+	fmt.Printf("%s\n", b)
+	fmt.Printf("Type = %T, value =%+[1]v\n", a)
 	// var e Employee
 	// e.Name = "Abhishek kumar"
 	// e.Number = 1234
@@ -49,7 +61,7 @@ func main() {
 	// fmt.Printf("%T %+[1]v", b)
 
 	// Another way is to make a annonymous struct OR a Struct literal;
-	var a = struct {
+	var g = struct {
 		title  string
 		artist string
 		year   int
@@ -60,9 +72,9 @@ func main() {
 		23,
 		2323,
 	}
-	fmt.Println(a)
+	fmt.Println(g)
 
-	var palbum = &a
+	var palbum = &g
 	fmt.Println(palbum)
 
 	// Struct compatibility
