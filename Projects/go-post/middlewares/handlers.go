@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -62,13 +63,79 @@ func CreateStock(w http.ResponseWriter, r *http.Request) {
 }
 
 // Get stock controller based on the id of the stock Method -> GET
-func GetStock() {}
+func GetStock(w http.ResponseWriter, r *http.Request) {
+	// extract variables of current requested url path
+	params := mux.Vars(r)
+
+	// get the id field from the param
+	id, err := strconv.Atoi(params["id"])
+
+	if err != nil {
+		log.Fatalf("Unable to convert the string to int.%v", err)
+	}
+
+	// get the stock associated with the id
+	stock, err := getStock(int64(id))
+
+	if err != nil {
+		log.Fatalf("Failed to get stock %v", err)
+	}
+
+	json.NewEncoder(w).Encode(stock)
+}
 
 // Get all the available stock Method -> GET
-func GetAllStock() {}
+func GetAllStock(w http.ResponseWriter, r *http.Request) {
+
+	// get all the stocks
+	stocks, err := GetAllStocks()
+
+	if err != nil {
+		log.Fatalf("Failed to fetch all the stocks %v", err)
+	}
+
+	json.NewEncoder(w).Encode(stocks)
+
+}
 
 // Update a stock based on passed id in query Method ->PATCH
-func UpdateStock() {}
+func UpdateStock(w http.ResponseWriter, r *http.Request) {
+
+	// get the id from requested url path with mux.Vars
+	params := mux.Vars(r)
+
+	// extract the id from the
+	id, err := strconv.Atoi(params["id"])
+	if err != nil {
+		log.Fatalf("Unable to process conversion of the requested id %v", err)
+	}
+
+	// create an instance of the stocks model
+	var stock models.Stock
+
+	// decode the json request to stock
+	err = json.NewDecoder(r.Body).Decode(&stock)
+
+	if err != nil {
+		log.Fatalf("unable the decode the request body from update stocks %v", err)
+
+	}
+
+	// if ok! call the updateStock function to update the stock
+
+	updatedRows := updateSingleStock(int64(id), stock)
+
+	msg := fmt.Sprintf("Stock updated successfully. Total rows/record affected %v", updatedRows)
+
+	// send the response object
+	res := response{
+		ID:      int64(id),
+		Message: msg,
+	}
+
+	json.NewEncoder(w).Encode(res)
+
+}
 
 // Delete a particular stock Method -> DElETE
 func DeleteStock() {}
