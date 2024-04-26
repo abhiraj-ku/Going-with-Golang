@@ -138,4 +138,7 @@ func UpdateStock(w http.ResponseWriter, r *http.Request) {
 }
 
 // Delete a particular stock Method -> DElETE
-func DeleteStock() {}
+func DeleteStock(w http.ResponseWriter, r *http.Request) {
+	// get the stock id from the
+
+}
