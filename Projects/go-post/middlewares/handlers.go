@@ -20,29 +20,61 @@ type response struct {
 	Message string `json:"message,omitempty"`
 }
 
-func createConnection() *sql.DB {
-	err := godotenv.Load(".env")
+// func createConnection() *sql.DB {
+// 	err := godotenv.Load(".env")
 
+// 	if err != nil {
+// 		log.Fatal("Error loading .env file")
+// 	}
+
+// 	// connect to postgres and check for err
+// 	db, err := sql.Open("postgres", os.Getenv("POSTGRES_URL"))
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	// verify the db connection
+// 	err = db.Ping()
+// 	if err != nil {
+// 		panic(err)
+
+// 	}
+
+// 	// print success message if everything works fine
+// 	fmt.Println("Successfully connected to postgres")
+// 	return db
+// }
+
+// DB init -> single persistent connection through out program lifecycle
+
+var db *sql.DB
+
+func init() {
+	// Load the .env file
+	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	// connect to postgres and check for err
 	db, err := sql.Open("postgres", os.Getenv("POSTGRES_URL"))
 	if err != nil {
-		panic(err)
+		log.Fatalf("Error connecting to the DB: %v", err)
 	}
 
-	// verify the db connection
 	err = db.Ping()
 	if err != nil {
-		panic(err)
-
+		log.Fatalf("Error pinging the DB :%v", err)
 	}
 
-	// print success message if everything works fine
-	fmt.Println("Successfully connected to postgres")
-	return db
+	fmt.Println("DB connection successful")
+
+}
+
+// close the DB once program exits / closes
+func closeDB() {
+	if db != nil {
+		db.Close()
+	}
 }
 
 // Create stock controller Method -> POST
@@ -170,15 +202,44 @@ func DeleteStock(w http.ResponseWriter, r *http.Request) {
 
 // function handler to query with postgress
 
-func insertDB() {
-	db := createConnection()
-
-	defer db.Close()
+func insertDB(stock models.Stock) int64 {
 
 	sqlQuery := `insert into stocks(name,price,company) values($1,$2,$3) returning stockid`
 
 	var id int64
 
-	err := db.QueryRow(sqlQuery)
+	err := db.QueryRow(sqlQuery, stock.Name, stock.Price, stock.Company).Scan(&id)
+
+	if err != nil {
+		log.Fatalf("Unable to execute the query. %v", err)
+	}
+
+	fmt.Printf("Inserted a single record %v", id)
+	return id
+}
+
+// function to get stock -> Query
+func getStock(id int64) (models.Stock, error) {
+	// instance of the model to query
+	var stock models.Stock
+	// sql query to get the stock
+
+	sqlStatement := `select * from stocks where stockid=$1`
+
+	// execute the stament
+	row := db.QueryRow(sqlStatement, id)
+	err := row.Scan(&stock.StockID, &stock.Name, &stock.Price, &stock.Company)
+
+	switch err {
+	case sql.ErrNoRows:
+		fmt.Println("No rows returned")
+		return stock, nil
+	case nil:
+		return stock, nil
+	default:
+		log.Fatalf("Unable to scan the row  %v", err)
+	}
+
+	return stock, err
 
 }
