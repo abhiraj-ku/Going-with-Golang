@@ -122,7 +122,7 @@ func GetStock(w http.ResponseWriter, r *http.Request) {
 func GetAllStock(w http.ResponseWriter, r *http.Request) {
 
 	// get all the stocks
-	stocks, err := GetAllStocks()
+	stocks, err := getAllStocks()
 
 	if err != nil {
 		log.Fatalf("Failed to fetch all the stocks %v", err)
@@ -224,10 +224,10 @@ func getStock(id int64) (models.Stock, error) {
 	var stock models.Stock
 	// sql query to get the stock
 
-	sqlStatement := `select * from stocks where stockid=$1`
+	sqlQuery := `select * from stocks where stockid=$1`
 
 	// execute the stament
-	row := db.QueryRow(sqlStatement, id)
+	row := db.QueryRow(sqlQuery, id)
 	err := row.Scan(&stock.StockID, &stock.Name, &stock.Price, &stock.Company)
 
 	switch err {
@@ -241,5 +241,13 @@ func getStock(id int64) (models.Stock, error) {
 	}
 
 	return stock, err
+
+}
+
+// func to getAllStock
+
+func getAllStocks() ([]models.Stock, error) {
+	var stocks []models.Stock
+	sqlQuery := `select * from stocks`
 
 }
