@@ -10,6 +10,8 @@ import (
 	"os"
 	"strconv"
 
+	_ "github.com/lib/pq"
+
 	"github.com/gorilla/mux"
 
 	"github.com/joho/godotenv"
@@ -248,6 +250,63 @@ func getStock(id int64) (models.Stock, error) {
 
 func getAllStocks() ([]models.Stock, error) {
 	var stocks []models.Stock
+	// query statement to execute
 	sqlQuery := `select * from stocks`
+	// passing this query to database/sql package to fetch the result
+	rows, err := db.Query(sqlQuery)
 
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var stock models.Stock
+		err := rows.Scan(&stock.StockID, &stock.Name, &stock.Price, &stock.Company)
+		if err != nil {
+			return nil, err
+		}
+		stocks = append(stocks, stock)
+	}
+	return stocks, nil
+
+}
+
+// Update the stock ->
+
+func updateSingleStock(id int64, stock models.Stock) int64 {
+	sqlQuery := `UPDATE stocks SET name=$2, price=$3, company=$4 WHERE stockid=$1`
+
+	// execute the query
+	res, err := db.Exec(sqlQuery, id, stock.Name, stock.Price, stock.Company)
+
+	if err != nil {
+		log.Fatalf("Unable to execute the update query : %v", err)
+	}
+
+	updatedRows, err := res.RowsAffected()
+	if err != nil {
+		log.Fatalf("Error while checking the affected rows: %v", err)
+	}
+	fmt.Printf("Total rows/record affected  %v\n", updatedRows)
+	return updatedRows
+
+}
+
+// query function to delete the element
+
+func deleteStock(id int64) int64 {
+	sqlQuery := `delete from stock where stockid =$1`
+
+	res, err := db.Exec(sqlQuery, id)
+	if err != nil {
+		log.Fatalf("Unable to process the delete query: %v", err)
+	}
+	deletedRows, err := res.RowsAffected()
+	if err != nil {
+		log.Fatalf("Error while checking the affected/deleted rows: %v", err)
+	}
+	fmt.Printf("Total rows/record affected %v\n", deletedRows)
+	return deletedRows
 }
