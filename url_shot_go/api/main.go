@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/abhiraj-ku/url_shot_go/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
