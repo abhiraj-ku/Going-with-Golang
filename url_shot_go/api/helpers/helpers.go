@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// return the strict https to the
 func EnforceHTTP(url string) string {
 	if url[:4] != "http" {
 		return "http://" + url
