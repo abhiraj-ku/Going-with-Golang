@@ -1,23 +1,18 @@
 package main
 
 import (
-	// "context"
 	// "encoding/json"
 	"context"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
-
-	// "os"
-	// "os/signal"
-	// "strings"
 	"time"
 
-	// "github.com/go-chi/chi"
-	// "github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
-	"github.com/gofiber/fiber/middleware"
+
+	// "github.com/gofiber/fiber/middleware"
 	"github.com/thedevsaddam/renderer"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
