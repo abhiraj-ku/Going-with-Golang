@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Go-Land</title>
+</head>
+<body>
+    <h2>This is the golang world we are living in it .</h2>
+    {{if .image}}
+        <img src="{{ .image }}" alt="">
+    {{end}}
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <button type="submit">submit</button>
+        {{if .error}}
+            <p>{{ .error}}</p>
+        {{ end }}
+    </form>
+</body>
+</html>
