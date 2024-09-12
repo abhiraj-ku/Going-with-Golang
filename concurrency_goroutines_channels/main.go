@@ -14,14 +14,14 @@ type result struct {
 }
 
 // make the call to get the data
-func get(url string, ch chan<- result) {
+func get(url string, ch chan<- result) { // takes a channel which can only writes to
 	start := time.Now()
 	if resp, err := http.Get(url); err != nil {
 		ch <- result{url, err, 0}
 
 	} else {
 		t := time.Since(start).Round(time.Millisecond)
-		ch <- result{url, nil, t}
+		ch <- result{url, nil, t} // channel which reads only
 		resp.Body.Close()
 	}
 }
