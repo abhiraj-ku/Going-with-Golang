@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,10 +10,16 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/abhiraj-ku/rss_feed_scrapper/internal/database"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
+
+type apiConfig struct {
+	DB *database.Queries
+}
 
 func main() {
 	// Load environment variables from .env file
@@ -22,12 +29,26 @@ func main() {
 	}
 
 	fmt.Println("Hello, world!")
+	// Port for server from dotenv
 	port := os.Getenv("PORT")
 	if port == "" {
 		fmt.Println("Environment variable PORT is not set")
 	}
+	// server connection string
+	connectionDb := os.Getenv("DB_URL")
+	if connectionDb == "" {
+		fmt.Println("Environment variable PORT is not set")
+	}
 
-	// router
+	conn, err := sql.Open("postgres", connectionDb)
+	if err != nil {
+		log.Fatal("can't connect to db")
+	}
+
+	// apiCfg:= apiConfig{
+
+	// }
+
 	// for closing the server on ctrl+c gracefully
 	stopChan := make(chan os.Signal)
 	signal.Notify(stopChan, os.Interrupt)
