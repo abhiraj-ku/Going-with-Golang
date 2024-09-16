@@ -35,19 +35,19 @@ func main() {
 		fmt.Println("Environment variable PORT is not set")
 	}
 	// server connection string
-	connectionDb := os.Getenv("DB_URL")
-	if connectionDb == "" {
+	dbConnectionUrl := os.Getenv("DB_URL")
+	if dbConnectionUrl == "" {
 		fmt.Println("Environment variable PORT is not set")
 	}
 
-	conn, err := sql.Open("postgres", connectionDb)
+	conn, err := sql.Open("postgres", dbConnectionUrl)
 	if err != nil {
 		log.Fatal("can't connect to db")
 	}
 
-	// apiCfg:= apiConfig{
-
-	// }
+	apiCfg := apiConfig{
+		DB: database.New(conn),
+	}
 
 	// for closing the server on ctrl+c gracefully
 	stopChan := make(chan os.Signal)
@@ -69,6 +69,7 @@ func main() {
 	v1Router := chi.NewRouter()
 	v1Router.Get("/healthz", handlerReadiness)
 	v1Router.Get("/err", handlerErr)
+	v1Router.Post("/users", apiCfg.handlerCreateUser)
 
 	router.Mount("/v1", v1Router)
 
