@@ -1,0 +1,35 @@
+package main
+
+import "fmt"
+
+// func printHello(c chan string) {
+// 	c <- "hello world"
+// }
+
+func printNum(c chan int) {
+	for i := 0; i <= 5; i++ {
+		c <- i
+	}
+	close(c)
+}
+
+func main() {
+	//c := make(chan string)
+	// go printHello(c)
+	// h := <-c
+	// fmt.Println(h)
+	c := make(chan int, 3)
+	go printNum(c)
+	for num := range c {
+		fmt.Println(num)
+	}
+
+}
+// send data to channel
+
+// func game(c chan<- int){
+// 	c<-i
+// 	// recieves data
+// 	func gg(c <-chan int){}
+// 		c:= <-c
+// }
